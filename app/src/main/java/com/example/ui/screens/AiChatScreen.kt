@@ -260,35 +260,35 @@ fun AiChatScreen(viewModel: SignageViewModel) {
                     )
                 }
             }
-        }
-
-        // Fast Prompts Chips
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .horizontalScroll(rememberScrollState()),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            fastPrompts.forEach { prompt ->
-                Surface(
-                    onClick = { viewModel.sendChatMessage(prompt) },
-                    enabled = !isLoading,
-                    shape = RoundedCornerShape(10.dp),
-                    color = Slate900,
-                    border = CardDefaults.outlinedCardBorder().copy(
-                        brush = SolidColor(if (isLoading) Slate800.copy(alpha = 0.5f) else Slate800)
-                    )
-                ) {
-                    Text(
-                        text = prompt,
-                        style = MaterialTheme.typography.labelSmall,
-                        color = if (isLoading) Cyan400.copy(alpha = 0.45f) else Cyan400,
-                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 10.dp)
-                    )
+        }        
+        // Fast Prompts Chips (ẩn sau khi đã bắt đầu trò chuyện để chat không bị che)
+        if (messages.isEmpty()) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .horizontalScroll(rememberScrollState()),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                fastPrompts.forEach { prompt ->
+                    Surface(
+                        onClick = { viewModel.sendChatMessage(prompt) },
+                        enabled = !isLoading,
+                        shape = RoundedCornerShape(10.dp),
+                        color = Slate900,
+                        border = CardDefaults.outlinedCardBorder().copy(
+                            brush = SolidColor(if (isLoading) Slate800.copy(alpha = 0.5f) else Slate800)
+                        )
+                    ) {
+                        Text(
+                            text = prompt,
+                            style = MaterialTheme.typography.labelSmall,
+                            color = if (isLoading) Cyan400.copy(alpha = 0.45f) else Cyan400,
+                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 10.dp)
+                        )
+                    }
                 }
             }
         }
-
         // Messages List
         LazyColumn(
             state = listState,
