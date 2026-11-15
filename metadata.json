@@ -1,0 +1,6 @@
+{
+  "name": "Đức Anh Ad PRO",
+  "description": "Hệ thống bóc tách vật tư kỹ thuật & báo giá chuyên nghiệp ngành Quảng Cáo",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
