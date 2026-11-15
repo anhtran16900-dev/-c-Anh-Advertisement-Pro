@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "863480677707",
+    "project_id": "ducanhadpro-86955",
+    "storage_bucket": "ducanhadpro-86955.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:863480677707:android:ec57da7d56e7ad2bf054ce",
+        "android_client_info": {
+          "package_name": "com.aistudio.ducanhadpro.qcbk"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBIZM0uxHFbmwfQOh_6CkpcNVlJSgHM0o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
