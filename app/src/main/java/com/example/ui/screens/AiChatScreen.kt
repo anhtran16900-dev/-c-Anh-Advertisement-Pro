@@ -435,3 +435,103 @@ Row(
                 contentDescription = null,  
                 tint = if (isError) Color(0xFFFCA5A5) else Pink400,  
                 modifier = Modifier.size(18.dp)
+                )
+            }
+            Spacer(modifier = Modifier.width(8.dp))
+        }
+
+        Card(
+            modifier = Modifier.fillMaxWidth(if (isUser) 0.85f else 0.90f),
+            shape = RoundedCornerShape(
+                topStart = 14.dp,
+                topEnd = 14.dp,
+                bottomStart = if (isUser) 14.dp else 4.dp,
+                bottomEnd = if (isUser) 4.dp else 14.dp
+            ),
+            colors = CardDefaults.cardColors(
+                containerColor = when {
+                    isUser -> Pink500.copy(alpha = 0.18f)
+                    isError -> Color(0xFFEF4444).copy(alpha = 0.12f)
+                    else -> Slate900
+                }
+            ),
+            border = CardDefaults.outlinedCardBorder().copy(
+                brush = SolidColor(if (isError) Color(0xFFEF4444).copy(alpha = 0.4f) else Slate800)
+            )
+        ) {
+            Column(modifier = Modifier.padding(12.dp)) {
+                Text(
+                    text = message.text,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.White
+                )
+
+                if (!isUser) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        IconButton(
+                            onClick = onCopy,
+                            modifier = Modifier.size(28.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.ContentCopy,
+                                contentDescription = "Sao chép",
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.size(16.dp)
+                            )
+                        }
+
+                        if (isError) {
+                            OutlinedButton(
+                                onClick = { onRetry(message.text) },
+                                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp),
+                                colors = ButtonDefaults.outlinedButtonColors(contentColor = Cyan400),
+                                border = CardDefaults.outlinedCardBorder().copy(brush = SolidColor(Slate700))
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Refresh,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(14.dp)
+                                )
+                                Spacer(modifier = Modifier.width(4.dp))
+                                Text("Thử Lại", fontSize = 12.sp)
+                            }
+                        }
+
+                        if (showUseFreeFallback) {
+                            OutlinedButton(
+                                onClick = { onSwitchToFreeAndRetry(message.text) },
+                                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp),
+                                colors = ButtonDefaults.outlinedButtonColors(contentColor = Emerald400),
+                                border = CardDefaults.outlinedCardBorder().copy(brush = SolidColor(Slate700))
+                            ) {
+                                Text("Dùng bản miễn phí", fontSize = 12.sp)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if (isUser) {
+            Spacer(modifier = Modifier.width(8.dp))
+            Box(
+                modifier = Modifier
+                    .size(32.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(Cyan400.copy(alpha = 0.2f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Person,
+                    contentDescription = null,
+                    tint = Cyan400,
+                    modifier = Modifier.size(18.dp)
+                )
+            }
+        }
+    }
+}
