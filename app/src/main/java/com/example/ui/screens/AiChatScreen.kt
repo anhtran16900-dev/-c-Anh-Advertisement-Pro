@@ -3,9 +3,7 @@ package com.example.ui.screens
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -33,7 +32,6 @@ import androidx.compose.material.icons.filled.DeleteOutline
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.SmartToy
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -66,7 +64,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.model.ChatMessage
 import com.example.ui.theme.Cyan400
-import com.example.ui.theme.Cyan500
 import com.example.ui.theme.Cyan900
 import com.example.ui.theme.Emerald400
 import com.example.ui.theme.Pink400
@@ -99,9 +96,19 @@ LaunchedEffect(Unit) {
 }  
 
 val lastMessageLength = messages.lastOrNull()?.text?.length ?: 0  
-LaunchedEffect(messages.size, lastMessageLength, isLoading) {  
+
+// Tin nhắn mới xuất hiện: cuộn mượt (có hiệu ứng) xuống cuối  
+LaunchedEffect(messages.size) {  
     if (messages.isNotEmpty()) {  
         listState.animateScrollToItem(messages.size - 1)  
+    }  
+}  
+
+// AI đang gõ từng chữ: giữ vị trí cuộn ở cuối ngay lập tức, không lặp lại hiệu ứng  
+// animate mỗi ký tự (tránh giật/lag khi nội dung đang được gõ liên tục)  
+LaunchedEffect(lastMessageLength, isLoading) {  
+    if (messages.isNotEmpty()) {  
+        listState.scrollToItem(messages.size - 1)  
     }  
 }  
 
@@ -117,6 +124,7 @@ Column(
     modifier = Modifier  
         .fillMaxSize()  
         .background(Slate950)  
+        .imePadding()  
         .padding(16.dp),  
     verticalArrangement = Arrangement.spacedBy(10.dp)  
 ) {  
@@ -295,6 +303,7 @@ Column(
         modifier = Modifier  
             .weight(1f)  
             .fillMaxWidth(),  
+        contentPadding = PaddingValues(vertical = 4.dp),  
         verticalArrangement = Arrangement.spacedBy(12.dp)  
     ) {  
         items(messages, key = { it.id }) { msg ->  
