@@ -15,7 +15,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -125,13 +127,15 @@ fun AcademyScreen(viewModel: SignageViewModel) {
         }
     }
 
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .background(Slate950)
-            .padding(16.dp),
+            .imePadding(),
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
+        item {
         // Header + Overall Workshop Mastery Card
         Card(
             modifier = Modifier
@@ -217,14 +221,16 @@ fun AcademyScreen(viewModel: SignageViewModel) {
                                 .fillMaxWidth()
                                 .height(6.dp)
                                 .clip(RoundedCornerShape(4.dp)),
-                            color = if (masteryPercent == 100) Emerald400 else Emerald400,
+                            color = if (masteryPercent == 100) Emerald400 else Cyan400,
                             trackColor = Slate800
                         )
                     }
                 }
             }
         }
+        } // end header item
 
+        item {
         // Search Bar
         OutlinedTextField(
             value = searchQuery,
@@ -256,7 +262,9 @@ fun AcademyScreen(viewModel: SignageViewModel) {
             ),
             shape = RoundedCornerShape(12.dp)
         )
+        } // end search item
 
+        item {
         // Category Filter Chips
         Row(
             modifier = Modifier
@@ -291,69 +299,63 @@ fun AcademyScreen(viewModel: SignageViewModel) {
                 }
             }
         }
+        } // end category filter item
 
         // Guides List or Empty State
         if (filteredGuides.isEmpty()) {
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
-                shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Slate900),
-                border = CardDefaults.outlinedCardBorder().copy(brush = SolidColor(Slate800))
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(24.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
+            item {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(containerColor = Slate900),
+                    border = CardDefaults.outlinedCardBorder().copy(brush = SolidColor(Slate800))
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.Search,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.size(40.dp)
-                    )
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Text(
-                        text = "Không tìm thấy giáo trình phù hợp",
-                        style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = "Thử tìm với từ khóa như Corel, Maintop, PhotoPrint, UV, CNC hoặc LED.",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    Spacer(modifier = Modifier.height(14.dp))
-                    OutlinedButton(
-                        onClick = {
-                            searchQuery = ""
-                            selectedCategory = "Tất Cả"
-                        },
-                        modifier = Modifier.heightIn(min = 48.dp)
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(24.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
                     ) {
-                        Text("Hiển Thị Tất Cả", color = Cyan400, fontWeight = FontWeight.Bold)
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.size(40.dp)
+                        )
+                        Spacer(modifier = Modifier.height(10.dp))
+                        Text(
+                            text = "Không tìm thấy giáo trình phù hợp",
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = "Thử tìm với từ khóa như Corel, Maintop, PhotoPrint, UV, CNC hoặc LED.",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Spacer(modifier = Modifier.height(14.dp))
+                        OutlinedButton(
+                            onClick = {
+                                searchQuery = ""
+                                selectedCategory = "Tất Cả"
+                            },
+                            modifier = Modifier.heightIn(min = 48.dp)
+                        ) {
+                            Text("Hiển Thị Tất Cả", color = Cyan400, fontWeight = FontWeight.Bold)
+                        }
                     }
                 }
             }
         } else {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                items(filteredGuides, key = { it.id }) { guide ->
-                    GuideCardItem(
-                        guide = guide,
-                        completedSteps = completedGuideSteps,
-                        onOpen = { viewModel.selectGuide(guide) }
-                    )
-                }
+            items(filteredGuides, key = { it.id }) { guide ->
+                GuideCardItem(
+                    guide = guide,
+                    completedSteps = completedGuideSteps,
+                    onOpen = { viewModel.selectGuide(guide) }
+                )
             }
         }
     }
@@ -450,161 +452,4 @@ private fun GuideCardItem(
                         shape = RoundedCornerShape(6.dp)
                     ) {
                         Row(
-                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Schedule,
-                                contentDescription = null,
-                                tint = Amber400,
-                                modifier = Modifier.size(11.dp)
-                            )
-                            Spacer(modifier = Modifier.width(3.dp))
-                            Text(
-                                text = "${guide.durationMinutes}p",
-                                color = Amber400,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 10.sp
-                            )
-                        }
-                    }
-
-                    Surface(
-                        color = if (isMastered) Emerald400.copy(alpha = 0.2f) else Cyan400.copy(alpha = 0.14f),
-                        shape = RoundedCornerShape(6.dp)
-                    ) {
-                        Row(
-                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            if (isMastered) {
-                                Icon(
-                                    imageVector = Icons.Default.CheckCircle,
-                                    contentDescription = null,
-                                    tint = Emerald400,
-                                    modifier = Modifier.size(11.dp)
-                                )
-                                Spacer(modifier = Modifier.width(3.dp))
-                            }
-                            Text(
-                                text = if (isMastered) "Đã thành thạo" else "$doneSteps/${guide.steps.size} bước",
-                                color = if (isMastered) Emerald400 else Cyan400,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 10.sp
-                            )
-                        }
-                    }
-                }
-            }
-
-            Text(
-                text = guide.title,
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
-
-            Text(
-                text = guide.summary,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                lineHeight = 18.sp
-            )
-
-            // Curriculum Highlights Chips
-            FlowRow(
-                horizontalArrangement = Arrangement.spacedBy(6.dp),
-                verticalArrangement = Arrangement.spacedBy(6.dp)
-            ) {
-                if (guide.shortcutsAndSpecs.isNotEmpty()) {
-                    SmallMetaChip("${guide.shortcutsAndSpecs.size} thông số & phím tắt", Cyan400)
-                }
-                if (guide.commonMistakes.isNotEmpty()) {
-                    SmallMetaChip("${guide.commonMistakes.size} lỗi hay gặp", Amber400)
-                }
-                if (guide.practiceExercise.isNotBlank()) {
-                    SmallMetaChip("Có bài tập thực hành", Emerald400)
-                }
-            }
-
-            Button(
-                onClick = onOpen,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(min = 48.dp)
-                    .testTag("guide_open_${guide.id}"),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = if (isMastered) Emerald400.copy(alpha = 0.2f) else Slate800,
-                    contentColor = if (isMastered) Emerald400 else Color.White
-                ),
-                shape = RoundedCornerShape(10.dp)
-            ) {
-                Text(
-                    text = if (isMastered) "Ôn Tập Lại Giáo Trình (${guide.steps.size} Bước)" else "Vào Học Chi Tiết (${guide.steps.size} Bước)",
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun SmallMetaChip(text: String, color: Color) {
-    Surface(
-        color = Slate950,
-        shape = RoundedCornerShape(6.dp),
-        border = CardDefaults.outlinedCardBorder().copy(brush = SolidColor(color.copy(alpha = 0.35f)))
-    ) {
-        Text(
-            text = text,
-            fontSize = 10.sp,
-            fontWeight = FontWeight.Medium,
-            color = color,
-            modifier = Modifier.padding(horizontal = 7.dp, vertical = 3.dp)
-        )
-    }
-}
-
-private fun buildFullGuideCopyText(guide: AcademyGuide): String = buildString {
-    appendLine(guide.title)
-    appendLine("${guide.category} • ${guide.level} • ${guide.durationMinutes} phút")
-    if (guide.prerequisites.isNotBlank()) {
-        appendLine("Chuẩn bị: ${guide.prerequisites}")
-    }
-    appendLine()
-    guide.steps.forEach { step ->
-        appendLine("Bước ${step.stepNumber}: ${step.title}")
-        appendLine(step.content)
-        step.detailedChecklist.forEachIndexed { idx, item ->
-            appendLine("  ${idx + 1}. $item")
-        }
-        if (step.expectedResult.isNotBlank()) {
-            appendLine("✅ Kiểm tra đạt chuẩn: ${step.expectedResult}")
-        }
-        if (step.proTip.isNotBlank()) {
-            appendLine("💡 Bí quyết thợ cả: ${step.proTip}")
-        }
-        if (step.techNote.isNotBlank()) {
-            appendLine("⚠️ Cảnh báo: ${step.techNote}")
-        }
-        appendLine()
-    }
-    if (guide.shortcutsAndSpecs.isNotEmpty()) {
-        appendLine("⌨️ Bảng Phím Tắt & Thông Số:")
-        guide.shortcutsAndSpecs.forEach { (k, v) ->
-            appendLine("- $k: $v")
-        }
-        appendLine()
-    }
-    if (guide.commonMistakes.isNotEmpty()) {
-        appendLine("🚨 Lỗi Hay Mắc & Cách Sửa:")
-        guide.commonMistakes.forEachIndexed { i, m ->
-            appendLine("${i + 1}. $m")
-        }
-        appendLine()
-    }
-    if (guide.practiceExercise.isNotBlank()) {
-        appendLine("🛠️ ${guide.practiceExercise}")
-    }
-}
+                            modifier = Modifier.padding(horizon
