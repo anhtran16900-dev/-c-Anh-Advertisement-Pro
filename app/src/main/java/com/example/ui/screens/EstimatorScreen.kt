@@ -416,12 +416,24 @@ fun EstimatorScreen(
                                 )
                             }
 
-                            DropdownMenuItem(
+                                                        DropdownMenuItem(
                                 text = {
                                     Text(
                                         text = "➕ Thêm loại hạng mục mới...",
                                         style = MaterialTheme.typography.bodySmall,
-                                        fontWeigh
+                                        fontWeight = FontWeight.Bold,
+                                        color = Emerald400
+                                    )
+                                },
+                                onClick = {
+                                    editingCategoryOption = null
+                                    showCategoryEditorDialog = true
+                                    categoryExpanded = false
+                                }
+                            )
+                        }
+                    }
+                }
                 // 2. Item Name - Tên hạng mục
                 Column {
                     Row(
@@ -1165,8 +1177,12 @@ fun EstimatorScreen(
                             }
 
                             else -> {}
-                        }                                    
-                Card(
+}
+}
+}
+
+// 6. WORK & MARGIN PARAMETERS
+Card(
                     modifier = Modifier.fillMaxWidth(),
                     colors = CardDefaults.cardColors(
                         containerColor = Slate950
