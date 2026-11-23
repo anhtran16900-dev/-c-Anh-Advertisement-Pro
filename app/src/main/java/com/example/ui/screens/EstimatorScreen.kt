@@ -1160,7 +1160,12 @@ fun EstimatorScreen(
                                 Text(
                                     text = "Chủng Loại Bạt Che & Công Trình:",
                                     style = MaterialTheme.typography.labelSmall,
-                // 6. WORK & MARGIN PARAMETERS
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+
+                            else -> {}
+                        }                                    
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     colors = CardDefaults.cardColors(
